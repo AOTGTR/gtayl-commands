@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gtaYL — คำสั่ง</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+  :root {
+    --bg:      #0e1013;
+    --panel:   #16191e;
+    --line:    #23272e;
+    --text:    #d7dae0;
+    --dim:     #7d8794;
+    --accent:  #f0a33c;
+    --code:    #8fd3ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 "IBM Plex Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 56px 22px 80px; }
+
+  header { margin-bottom: 44px; }
+  h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+  h1 span { color: var(--accent); }
+  .sub { margin: 6px 0 0; color: var(--dim); font-size: 14px; }
+
+  h2 {
+    margin: 40px 0 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .rows { border-top: 1px solid var(--line); }
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 20px;
+    align-items: baseline;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  code {
+    font: 500 14px/1.5 "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--code);
+    word-break: break-all;
+  }
+  .what { color: var(--dim); font-size: 14px; text-align: right; }
+  .arg { color: var(--dim); }
+
+  .slots { display: grid; gap: 10px; }
+  .slot {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 11px 14px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+  }
+  .key {
+    display: grid;
+    place-items: center;
+    height: 30px;
+    border: 1px solid #343a44;
+    border-radius: 5px;
+    font: 500 14px "JetBrains Mono", monospace;
+    color: var(--accent);
+    background: #1b1f25;
+  }
+  .slot p { margin: 0; font-size: 14px; }
+
+  a { color: var(--code); }
+  .note { margin-top: 10px; color: var(--dim); font-size: 13px; }
+  footer {
+    margin-top: 56px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: #5c6673;
+    font-size: 12px;
+  }
+
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; }
+    .what { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>gta<span>YL</span> — คำสั่ง</h1>
+    <p class="sub">รายการคำสั่งที่ใช้อยู่จริงในเซิร์ฟเวอร์</p>
+  </header>
+
+  <h2>แผนที่</h2>
+  <div class="rows">
+    <div class="row">
+      <code><a href="http://localhost:8123/avo.html">http://localhost:8123/avo.html</a></code>
+      <span class="what">โอเวอร์เลย์แมพ</span>
+    </div>
+  </div>
+
+  <h2>คำสั่ง</h2>
+  <div class="rows">
+    <div class="row">
+      <code>/ylc mid swap</code>
+      <span class="what">สลับรถ สุ่ม</span>
+    </div>
+  </div>
+
+  <h2>ช่วย</h2>
+  <div class="rows">
+    <div class="row">
+      <code>/ylc help fix</code>
+      <span class="what">ช่วยซ่อมล้อรถ</span>
+    </div>
+  </div>
+
+  <h2>แกล้ง</h2>
+  <div class="rows">
+    <div class="row">
+      <code>/ylc prank swap</code>
+      <span class="what">ลบล้อรถ</span>
+    </div>
+    <div class="row">
+      <code>/test meteor</code>
+      <span class="what">เทสระเบิด (ชั่วคราว)</span>
+    </div>
+  </div>
+
+  <h2>ตั้งค่า</h2>
+  <div class="rows">
+    <div class="row">
+      <code>/ylc settings spawnnpc <span class="arg">&lt;ใกล้สุด&gt; &lt;ไกลสุด&gt;</span></code>
+      <span class="what">ระยะที่ชาวบ้านมาโผล่</span>
+    </div>
+    <div class="row">
+      <code>/ylc settings deliver <span class="arg">&lt;ใกล้สุด&gt; &lt;ไกลสุด&gt;</span></code>
+      <span class="what">ระยะจากจุดรับถึงจุดส่ง</span>
+    </div>
+    <div class="row">
+      <code>/ylc settings time <span class="arg">&lt;วินาที&gt;</span></code>
+      <span class="what">นับถอยหลังตอนส่ง · 0 = ปิด</span>
+    </div>
+  </div>
+  <p class="note">พิมพ์คำสั่งเปล่า ๆ เพื่อดูค่าปัจจุบัน</p>
+
+  <h2>ไอเทมในช่อง</h2>
+  <div class="slots">
+    <div class="slot"><span class="key">6</span><p>ปักเส้นทางบนถนน</p></div>
+    <div class="slot"><span class="key">7</span><p>ซูมแผนที่เว็บ</p></div>
+    <div class="slot"><span class="key">8</span><p>แผนที่เป้าหมาย</p></div>
+  </div>
+  <p class="note">กดเลือกช่องแล้วใช้งานได้เลย ย้ายหรือทิ้งไม่ได้</p>
+
+  <footer>gtaYL · Minecraft 1.21.11</footer>
+
+</div>
+</body>
+</html>
