@@ -118,27 +118,19 @@
     </div>
   </div>
 
-  <h2>คำสั่ง</h2>
+  <h2>คนดูส่งได้ — แกล้ง</h2>
   <div class="rows">
     <div class="row">
-      <code>/ylc mid swap</code>
-      <span class="what">สลับรถ สุ่ม</span>
+      <code>/ylc prank wheel</code>
+      <span class="what">ล้อรถหลุด</span>
     </div>
-  </div>
-
-  <h2>ช่วย</h2>
-  <div class="rows">
-    <div class="row">
-      <code>/ylc help fix</code>
-      <span class="what">ช่วยซ่อมล้อรถ</span>
-    </div>
-  </div>
-
-  <h2>แกล้ง</h2>
-  <div class="rows">
     <div class="row">
       <code>/ylc prank swap</code>
-      <span class="what">ลบล้อรถ</span>
+      <span class="what">สลับรถทั้งคันเป็นคันอื่น</span>
+    </div>
+    <div class="row">
+      <code>/ylc prank warp <span class="arg">&lt;ใกล้&gt; &lt;ไกล&gt; &lt;nocar|car|rnd&gt;</span></code>
+      <span class="what">วาปออกไปไกล ๆ · เลือกได้ว่ารถไปด้วยไหม</span>
     </div>
     <div class="row">
       <code>/ylc prank meteor <span class="arg">&lt;ขนาด&gt; &lt;จำนวน&gt;</span></code>
@@ -156,10 +148,68 @@
       <code>/ylc prank bomb <span class="arg">&lt;วินาที&gt;</span></code>
       <span class="what">ระเบิดรถ · นับถอยหลังมีเสียง ลงทันยังรอด</span>
     </div>
+    <div class="row">
+      <code>/ylc prank hit <span class="arg">&lt;%&gt;</span></code>
+      <span class="what">ทุบรถทีละ % ครบ 100 แล้วระเบิด · ไม่ใส่ = 20%</span>
+    </div>
+    <div class="row">
+      <code>/ylc prank police <span class="arg">&lt;1-6&gt;</span></code>
+      <span class="what">เรียกตำรวจไล่ ติดดาวทันที · เกิดดักหน้า ไม่ใช่ตามหลัง</span>
+    </div>
   </div>
+
+  <h2>คนดูส่งได้ — ช่วย</h2>
+  <div class="rows">
+    <div class="row">
+      <code>/ylc help heal</code>
+      <span class="what">เลือดเต็มทันที</span>
+    </div>
+    <div class="row">
+      <code>/ylc help car</code>
+      <span class="what">วาปไปหารถคันใกล้สุด</span>
+    </div>
+    <div class="row">
+      <code>/ylc help fix <span class="arg">&lt;all|fl|fr|rl|rr&gt;</span></code>
+      <span class="what">ใส่ล้อคืน</span>
+    </div>
+  </div>
+
+  <h2>คนดูส่งได้ — ได้ทั้งสองทาง</h2>
+  <div class="rows">
+    <div class="row">
+      <code>/ylc mid swap</code>
+      <span class="what">เปลี่ยนชนิดรถที่ขับอยู่ แบบสุ่ม</span>
+    </div>
+    <div class="row">
+      <code>/ylc mid rocket <span class="arg">&lt;20-220|auto&gt;</span></code>
+      <span class="what">รถพุ่งไปหน้า ทะลุทุกอย่าง · ไม่ใส่ = 100 บล็อก</span>
+    </div>
+  </div>
+  <p class="note">จรวดทะลุกำแพงโดยตั้งใจ — เป็นทางออกจากลานจอด ทางตัน หรือผิดฝั่งตึก · <code>auto</code> วัดตึกที่ขวางแล้วคิดแรงเอง</p>
+
+  <h2>ติดอยู่ ใช้อันนี้</h2>
+  <div class="rows">
+    <div class="row">
+      <code>/ylc settings road</code>
+      <span class="what">ตกออกนอกเมือง กลับขึ้นถนนใกล้สุด พารถไปด้วย</span>
+    </div>
+    <div class="row">
+      <code>/ylc settings unstick</code>
+      <span class="what">ตายแล้วค้าง กดเกิดไม่ได้ ตัวไม่ขยับ</span>
+    </div>
+  </div>
+  <p class="note">สองอันนี้สั่งจากคอนโซลได้ด้วย (<code>ylc &lt;ชื่อ&gt; settings unstick</code>) เพราะคนที่ติดมักพิมพ์เองไม่ได้ · ปกติปลั๊กอินดึงขึ้นเองใน 3 วินาที อันนี้คือทางสำรอง</p>
 
   <h2>ตั้งค่า</h2>
   <div class="rows">
+    <div class="row">
+      <code>/ylc settings reset</code>
+      <span class="what">เริ่มภารกิจส่งของใหม่</span>
+    </div>
+    <div class="row">
+      <code>/ylc settings lose</code>
+      <span class="what">ทำภารกิจปัจจุบันพัง นับเป็นแพ้</span>
+    </div>
     <div class="row">
       <code>/ylc settings spawnnpc <span class="arg">&lt;ใกล้สุด&gt; &lt;ไกลสุด&gt;</span></code>
       <span class="what">ระยะที่ชาวบ้านมาโผล่</span>
