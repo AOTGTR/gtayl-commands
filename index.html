@@ -1,68 +1,160 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>gtaYL — คำสั่ง</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<title>gtaYL — คำสั่งทั้งหมด</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
 <style>
   :root {
-    --bg:      #0e1013;
-    --panel:   #16191e;
-    --line:    #23272e;
-    --text:    #d7dae0;
-    --dim:     #7d8794;
-    --accent:  #f0a33c;
-    --code:    #8fd3ff;
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1e222b;
+    --line: #2a2f3a;
+    --text: #e8eaef;
+    --dim: #9aa3b2;
+    --help: #4ade80;
+    --prank: #f87171;
+    --mid: #c084fc;
+    --set: #60a5fa;
+    --accent: #fbbf24;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f5f6f8; --panel: #ffffff; --panel-2: #f0f2f5; --line: #dfe3ea;
+      --text: #1a1d23; --dim: #5b6472;
+      --help: #16a34a; --prank: #dc2626; --mid: #9333ea; --set: #2563eb; --accent: #b45309;
+    }
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    font: 16px/1.6 "IBM Plex Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-family: "Segoe UI", "Noto Sans Thai", system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 640px; margin: 0 auto; padding: 56px 22px 80px; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 18px 80px; }
 
-  header { margin-bottom: 44px; }
+  header { margin-bottom: 22px; }
   h1 {
-    margin: 0;
-    font-size: 26px;
-    font-weight: 600;
-    letter-spacing: .01em;
+    font-size: clamp(26px, 5vw, 38px);
+    margin: 0 0 6px;
+    letter-spacing: -0.4px;
   }
   h1 span { color: var(--accent); }
-  .sub { margin: 6px 0 0; color: var(--dim); font-size: 14px; }
+  .sub { color: var(--dim); margin: 0; font-size: 15px; }
 
-  h2 {
-    margin: 40px 0 14px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: .16em;
-    text-transform: uppercase;
+  /* ── search ─────────────────────────────────────────────── */
+  .searchbox { position: relative; margin: 22px 0 14px; }
+  #q {
+    width: 100%;
+    padding: 14px 46px 14px 44px;
+    font-size: 17px;
+    font-family: inherit;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    outline: none;
+  }
+  #q:focus { border-color: var(--accent); }
+  #q::placeholder { color: var(--dim); }
+  .searchbox .icon {
+    position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+    color: var(--dim); font-size: 17px; pointer-events: none;
+  }
+  /* the greyed-out completion drawn under the caret */
+  #ghost {
+    position: absolute; left: 0; top: 0;
+    width: 100%;
+    padding: 14px 46px 14px 44px;
+    font-size: 17px;
+    font-family: inherit;
+    color: transparent;
+    pointer-events: none;
+    white-space: pre;
+    overflow: hidden;
+    border: 1px solid transparent;
+  }
+  #ghost b { color: var(--dim); font-weight: normal; }
+  .tabhint {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 11px; color: var(--dim);
+    border: 1px solid var(--line); border-radius: 6px;
+    padding: 2px 7px;
+    background: var(--panel-2);
+  }
+
+  /* ── filter chips ───────────────────────────────────────── */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .chip {
+    font: inherit; font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--panel);
     color: var(--dim);
+    cursor: pointer;
   }
+  .chip:hover { color: var(--text); }
+  .chip.on { color: #0f1115; border-color: transparent; font-weight: 600; }
+  .chip.on[data-cat="all"]   { background: var(--accent); }
+  .chip.on[data-cat="help"]  { background: var(--help); }
+  .chip.on[data-cat="prank"] { background: var(--prank); }
+  .chip.on[data-cat="mid"]   { background: var(--mid); }
+  .chip.on[data-cat="set"]   { background: var(--set); }
 
-  .rows { border-top: 1px solid var(--line); }
+  /* ── groups + rows ──────────────────────────────────────── */
+  .group { margin-bottom: 26px; }
+  .group h2, .extra h2 {
+    font-size: 15px; letter-spacing: 1.4px; text-transform: uppercase;
+    margin: 0 0 10px; padding-left: 2px;
+  }
+  .group[data-cat="help"]  h2 { color: var(--help); }
+  .group[data-cat="prank"] h2 { color: var(--prank); }
+  .group[data-cat="mid"]   h2 { color: var(--mid); }
+  .group[data-cat="set"]   h2 { color: var(--set); }
+  .extra h2 { color: var(--dim); }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
   .row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 6px 20px;
-    align-items: baseline;
-    padding: 13px 0;
-    border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--line);
+    cursor: pointer;
   }
+  .row:first-child { border-top: none; }
+  .row:hover { background: var(--panel-2); }
+  .row.copied { background: rgba(251,191,36,.14); }
+  .cmd {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 15px;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+  .group[data-cat="help"]  .cmd { color: var(--help); }
+  .group[data-cat="prank"] .cmd { color: var(--prank); }
+  .group[data-cat="mid"]   .cmd { color: var(--mid); }
+  .group[data-cat="set"]   .cmd { color: var(--set); }
+  .cmd .arg { color: var(--dim); }
+  .desc { color: var(--dim); font-size: 14px; flex: 1 1 auto; }
+  .gnote { color: var(--dim); font-size: 13px; margin: 8px 2px 0; }
   code {
-    font: 500 14px/1.5 "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-    color: var(--code);
-    word-break: break-all;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: .95em;
   }
-  .what { color: var(--dim); font-size: 14px; text-align: right; }
-  .arg { color: var(--dim); }
+  mark { background: rgba(251,191,36,.3); color: inherit; border-radius: 3px; padding: 0 2px; }
 
+  /* ── hotbar + map, shown when nothing is being searched ─── */
+  .extra { margin-bottom: 26px; }
   .slots { display: grid; gap: 10px; }
   .slot {
     display: grid;
@@ -72,33 +164,33 @@
     padding: 11px 14px;
     background: var(--panel);
     border: 1px solid var(--line);
-    border-radius: 7px;
+    border-radius: var(--radius);
   }
   .key {
-    display: grid;
-    place-items: center;
+    display: grid; place-items: center;
     height: 30px;
-    border: 1px solid #343a44;
-    border-radius: 5px;
-    font: 500 14px "JetBrains Mono", monospace;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
     color: var(--accent);
-    background: #1b1f25;
+    background: var(--panel-2);
   }
   .slot p { margin: 0; font-size: 14px; }
+  .maprow { cursor: default; }
+  a { color: var(--set); }
 
-  a { color: var(--code); }
-  .note { margin-top: 10px; color: var(--dim); font-size: 13px; }
-  footer {
-    margin-top: 56px;
-    padding-top: 18px;
-    border-top: 1px solid var(--line);
-    color: #5c6673;
-    font-size: 12px;
+  .empty { color: var(--dim); padding: 30px 4px; text-align: center; }
+  .note {
+    margin-top: 30px; padding: 14px 16px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    color: var(--dim); font-size: 14px;
   }
+  .note b { color: var(--text); font-weight: 600; }
+  footer { margin-top: 34px; color: var(--dim); font-size: 13px; text-align: center; }
 
-  @media (max-width: 520px) {
-    .row { grid-template-columns: 1fr; }
-    .what { text-align: left; }
+  @media (max-width: 620px) {
+    .row { flex-direction: column; gap: 3px; }
+    .cmd { white-space: normal; }
   }
 </style>
 </head>
@@ -106,181 +198,201 @@
 <div class="wrap">
 
   <header>
-    <h1>gta<span>YL</span> — คำสั่ง</h1>
-    <p class="sub">รายการคำสั่งที่ใช้อยู่จริงในเซิร์ฟเวอร์</p>
+    <h1>🚗 gta<span>YL</span> — คำสั่ง</h1>
+    <p class="sub">พิมพ์ค้นหา แล้วกด <b>Tab</b> เพื่อเติมคำสั่งอัตโนมัติ · คลิกคำสั่งเพื่อคัดลอก</p>
   </header>
 
-  <h2>แผนที่</h2>
-  <div class="rows">
-    <div class="row">
-      <code><a href="http://localhost:8123/avo.html">http://localhost:8123/avo.html</a></code>
-      <span class="what">โอเวอร์เลย์แมพ</span>
-    </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <div id="ghost"></div>
+    <input id="q" type="text" placeholder="ค้นหาคำสั่ง เช่น nitro, หิน, ตำรวจ, ล้อ…" autocomplete="off" spellcheck="false">
+    <span class="tabhint">Tab</span>
   </div>
 
-  <h2>คนดูส่งได้ — แกล้ง</h2>
-  <div class="rows">
-    <div class="row">
-      <code>/ylc prank wheel</code>
-      <span class="what">ล้อรถหลุด</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank swap</code>
-      <span class="what">สลับรถทั้งคันเป็นคันอื่น</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank warp <span class="arg">&lt;ใกล้&gt; &lt;ไกล&gt; &lt;car|nocar|rnd&gt;</span></code>
-      <span class="what">วาปออกไปไกล ๆ · รถไปด้วย · ใส่ <b>nocar</b> ถ้าจะทิ้งรถไว้</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank meteor <span class="arg">&lt;ขนาด&gt; &lt;จำนวน&gt;</span></code>
-      <span class="what">อุกกาบาต · ขนาดเป็นบล็อก 15 = หลุม 15×15</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank bigmeteor <span class="arg">&lt;จำนวน&gt;</span></code>
-      <span class="what">ลูกยักษ์ หลุม 21×21 ตายตัว</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank drop <span class="arg">&lt;ความสูง&gt;</span></code>
-      <span class="what">ยกขึ้นฟ้าแล้วปล่อยตก · อยู่ในรถ รถพังคนรอด</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank bomb <span class="arg">&lt;วินาที&gt;</span></code>
-      <span class="what">ระเบิดรถ · นับถอยหลังมีเสียง ลงทันยังรอด</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank hit <span class="arg">&lt;%&gt;</span></code>
-      <span class="what">ทุบรถทีละ % ครบ 100 แล้วระเบิด · ไม่ใส่ = 20%</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank police <span class="arg">&lt;1-6&gt;</span></code>
-      <span class="what">เรียกตำรวจไล่ ติดดาวทันที · เกิดดักหน้า ไม่ใช่ตามหลัง</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank runaway <span class="arg">&lt;วินาที&gt;</span></code>
-      <span class="what">ทำให้รถหนี · ขึ้นรถแล้วคุมไม่ได้</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank boulder <span class="arg">&lt;วินาที&gt;</span></code>
-      <span class="what">หินยักษ์กลิ้งไล่ตามถนน · ต้องบูสต์หนี · ชน = รถยับหนัก · ไม่ใส่ = 40 วิ · ส่งรัว = มาหลายลูกรอบตัว สูงสุด 20</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank tornado <span class="arg">&lt;วินาที&gt;</span></code>
-      <span class="what">ทอร์นาโดยักษ์ดูดรถกับคนขึ้นฟ้าแล้วเหวี่ยง · รถพังคนรอด · ไม่ใส่ = 60 วิ · ส่งซ้ำ = ต่อเวลา</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank bounce <span class="arg">&lt;วินาที&gt;</span></code>
-      <span class="what">รถกระโดดเองสูง 2-4 บล็อก จังหวะไม่เท่ากัน · ไม่ใส่ = 10 วิ · ส่งซ้ำ = ต่อเวลา</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank fans <span class="arg">&lt;วินาที&gt;</span></code>
-      <span class="what">แฟนคลับรุมรอบรถ รถช้าเหลือ 15 กม./ชม. · ไม่ใส่ = 15 วิ · ส่งซ้ำ = ต่อเวลา</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank detour <span class="arg">&lt;อย่างน้อย&gt; &lt;ไม่เกิน&gt;</span></code>
-      <span class="what">ลูกค้าเปลี่ยนใจ · ยังไม่ได้รับ = ย้ายจุดรับ · รับแล้ว = ย้ายจุดส่ง · ไกลขึ้นกี่บล็อก ไม่ใส่ = 15-40</span>
-    </div>
-    <div class="row">
-      <code>/ylc prank taxi <span class="arg">&lt;เวลา&gt;</span></code>
-      <span class="what">แท็กซี่มาแย่งผู้โดยสารแล้วขับหนี · <b>5</b> หรือ <b>5n</b> = นาที · <b>30s</b> = วินาที · ไม่ใส่ = 5 นาที · ไล่ทันแย่งคืนได้ · ส่งซ้ำ = ต่อเวลา แล้วมันโหดใหม่ · ดูเวลาที่เหลือบนแถบล่างจอ หมุดเหลืองบนแมพ</span>
-    </div>
+  <div class="chips" id="chips">
+    <button class="chip on" data-cat="all">ทั้งหมด</button>
+    <button class="chip" data-cat="help">ช่วย</button>
+    <button class="chip" data-cat="prank">แกล้ง</button>
+    <button class="chip" data-cat="mid">สองทาง</button>
+    <button class="chip" data-cat="set">ตั้งค่า</button>
   </div>
 
-  <h2>คนดูส่งได้ — ช่วย</h2>
-  <div class="rows">
-    <div class="row">
-      <code>/ylc help heal</code>
-      <span class="what">เลือดเต็มทันที</span>
-    </div>
-    <div class="row">
-      <code>/ylc help car</code>
-      <span class="what">วาปไปหารถคันใกล้สุด</span>
-    </div>
-    <div class="row">
-      <code>/ylc help fix <span class="arg">&lt;all|fl|fr|rl|rr&gt;</span></code>
-      <span class="what">ใส่ล้อคืน</span>
-    </div>
-    <div class="row">
-      <code>/ylc help air <span class="arg">&lt;นาที&gt;</span></code>
-      <span class="what">ส่งเครื่องบินมารับ · เว้นวรรค=ขึ้น <b>Ctrl</b>=ลง · ย่อง=ลงจากเครื่อง ได้ร่มชูชีพ · เครื่องจอดรอ ขึ้นคืนได้ · ส่งซ้ำ=บินมาหา</span>
-    </div>
-    <div class="row">
-      <code>/ylc help nitro <span class="arg">&lt;วินาที&gt;</span></code>
-      <span class="what">ไนตรัส เร็วขึ้นครึ่งหนึ่ง ทะลุ 120 · ไม่ได้ขับ = เก็บไว้ใช้ตอนขึ้นรถ · ไม่ใส่ = 7 วิ</span>
-    </div>
+  <div id="list"></div>
+
+  <div id="extras">
+    <section class="extra">
+      <h2>ไอเทมในช่อง</h2>
+      <div class="slots">
+        <div class="slot"><span class="key">3</span><p>ที่ขุด · ขุดบล็อก พังแล้วได้อันใหม่</p></div>
+        <div class="slot"><span class="key">7</span><p>ซูมแผนที่เว็บ</p></div>
+        <div class="slot"><span class="key">8</span><p>แผนที่เป้าหมาย</p></div>
+        <div class="slot"><span class="key">9</span><p>ตั้งค่า · คลิกขวาเปิดเมนู</p></div>
+      </div>
+      <p class="gnote">กดเลือกช่องแล้วใช้งานได้เลย ย้ายหรือทิ้งไม่ได้</p>
+    </section>
+
+    <section class="extra">
+      <h2>แผนที่</h2>
+      <div class="card">
+        <div class="row maprow">
+          <span class="cmd"><a href="http://localhost:8123/avo.html">http://localhost:8123/avo.html</a></span>
+          <span class="desc">โอเวอร์เลย์แมพ</span>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <h2>คนดูส่งได้ — ได้ทั้งสองทาง</h2>
-  <div class="rows">
-    <div class="row">
-      <code>/ylc mid swap</code>
-      <span class="what">เปลี่ยนชนิดรถที่ขับอยู่ แบบสุ่ม · ไม่มีรถ = เสกแล้วนั่งให้เลย · สุ่มสี</span>
-    </div>
-    <div class="row">
-      <code>/ylc mid rocket <span class="arg">&lt;20-220|auto&gt;</span></code>
-      <span class="what">รถพุ่งไปหน้า ทะลุทุกอย่าง · ไม่ใส่ = 100 บล็อก</span>
-    </div>
+  <div class="note">
+    <b>เลขท้ายคำสั่งไม่ใส่ก็ได้</b> — แต่ละคำสั่งมีค่าเริ่มต้นของตัวเอง ·
+    คำสั่งที่เป็นเวลา สั่งซ้ำ = ต่อเวลา ·
+    สั่งจากคอนโซลได้ ไม่ต้องใส่ชื่อผู้เล่น (<code>ylc prank boulder</code>)
   </div>
-  <p class="note">จรวดทะลุกำแพงโดยตั้งใจ — เป็นทางออกจากลานจอด ทางตัน หรือผิดฝั่งตึก · <code>auto</code> วัดตึกที่ขวางแล้วคิดแรงเอง</p>
-
-  <h2>ติดอยู่ ใช้อันนี้</h2>
-  <div class="rows">
-    <div class="row">
-      <code>/ylc settings road</code>
-      <span class="what">ตกออกนอกเมือง กลับขึ้นถนนใกล้สุด พารถไปด้วย</span>
-    </div>
-    <div class="row">
-      <code>/ylc settings unstick</code>
-      <span class="what">ตายแล้วค้าง กดเกิดไม่ได้ ตัวไม่ขยับ</span>
-    </div>
-  </div>
-  <p class="note">สองอันนี้สั่งจากคอนโซลได้ด้วย (<code>ylc &lt;ชื่อ&gt; settings unstick</code>) เพราะคนที่ติดมักพิมพ์เองไม่ได้ · ปกติปลั๊กอินดึงขึ้นเองใน 3 วินาที อันนี้คือทางสำรอง</p>
-
-  <h2>ตั้งค่า</h2>
-  <div class="rows">
-    <div class="row">
-      <code>/ylc settings reset</code>
-      <span class="what">เริ่มภารกิจส่งของใหม่</span>
-    </div>
-    <div class="row">
-      <code>/ylc settings lose</code>
-      <span class="what">ทำภารกิจปัจจุบันพัง นับเป็นแพ้</span>
-    </div>
-    <div class="row">
-      <code>/ylc settings taxi <span class="arg">&lt;stop|เวลา&gt;</span></code>
-      <span class="what">ถอนแท็กซี่ที่คนดูส่งมา · <b>stop</b> = ยกเลิกเลย · <b>2</b> = ตัดทิ้ง 2 นาที · <b>30s</b> = ตัด 30 วิ</span>
-    </div>
-    <div class="row">
-      <code>/ylc settings air stop</code>
-      <span class="what">เก็บเครื่องบินทุกลำ · ใครลอยอยู่ได้ร่มชูชีพ</span>
-    </div>
-    <div class="row">
-      <code>/ylc settings spawnnpc <span class="arg">&lt;ใกล้สุด&gt; &lt;ไกลสุด&gt;</span></code>
-      <span class="what">ระยะที่ชาวบ้านมาโผล่ · ใส่ตัวเดียว = ใกล้สุด</span>
-    </div>
-    <div class="row">
-      <code>/ylc settings deliver <span class="arg">&lt;ใกล้สุด&gt; &lt;ไกลสุด&gt;</span></code>
-      <span class="what">ระยะจากจุดรับถึงจุดส่ง · ใส่ตัวเดียว = ใกล้สุด</span>
-    </div>
-    <div class="row">
-      <code>/ylc settings time <span class="arg">&lt;วินาที&gt;</span></code>
-      <span class="what">นับถอยหลังตอนส่ง · 0 = ปิด</span>
-    </div>
-  </div>
-  <p class="note">พิมพ์คำสั่งเปล่า ๆ เพื่อดูค่าปัจจุบัน</p>
-  <p class="note">อุกกาบาตไม่ใส่เลข = หลุม 5×5 หนึ่งลูก · บล็อกทุกก้อนถูกคืนเองใน <code>meteor.hold-seconds</code> วิ (ตั้งใน config)</p>
-
-  <h2>ไอเทมในช่อง</h2>
-  <div class="slots">
-    <div class="slot"><span class="key">3</span><p>ที่ขุด · ขุดบล็อก พังแล้วได้อันใหม่</p></div>
-    <div class="slot"><span class="key">7</span><p>ซูมแผนที่เว็บ</p></div>
-    <div class="slot"><span class="key">8</span><p>แผนที่เป้าหมาย</p></div>
-    <div class="slot"><span class="key">9</span><p>ตั้งค่า · คลิกขวาเปิดเมนู</p></div>
-  </div>
-  <p class="note">กดเลือกช่องแล้วใช้งานได้เลย ย้ายหรือทิ้งไม่ได้</p>
 
   <footer>gtaYL · Minecraft 1.21.11</footer>
-
 </div>
+
+<script>
+const DATA = [
+  { cat: "help", title: "ช่วยสตรีมเมอร์", items: [
+    { cmd: "/ylc help heal", arg: "", desc: "เลือดเต็มทันที" },
+    { cmd: "/ylc help car", arg: "", desc: "วาปไปหารถคันใกล้สุด" },
+    { cmd: "/ylc help fix", arg: "[all|fl|fr|rl|rr]", desc: "ใส่ล้อคืน · ไม่ใส่ = ล้อที่หลุดก่อน" },
+    { cmd: "/ylc help air", arg: "[นาที]", desc: "ส่งเครื่องบินมารับ · เว้นวรรค = ขึ้น Ctrl = ลง · ย่อง = ลงจากเครื่อง ได้ร่มชูชีพ · เครื่องจอดรอ ขึ้นคืนได้ · ส่งซ้ำ = บินมาหา" },
+    { cmd: "/ylc help nitro", arg: "[วินาที]", desc: "ไนตรัส เร็วขึ้นครึ่งหนึ่ง ทะลุ 120 · ไม่ได้ขับ = เก็บไว้ใช้ตอนขึ้นรถ · ไม่ใส่ = 7 วิ" },
+  ]},
+  { cat: "prank", title: "แกล้งสตรีมเมอร์", items: [
+    { cmd: "/ylc prank wheel", arg: "", desc: "ล้อรถหลุด" },
+    { cmd: "/ylc prank swap", arg: "", desc: "สลับรถทั้งคันเป็นคันอื่น" },
+    { cmd: "/ylc prank warp", arg: "[ใกล้] [ไกล] [car|nocar|rnd]", desc: "วาปออกไปไกล ๆ · รถไปด้วย · nocar = ทิ้งรถไว้" },
+    { cmd: "/ylc prank meteor", arg: "[ขนาด] [จำนวน]", desc: "อุกกาบาต · ขนาดเป็นบล็อก 15 = หลุม 15×15 · ไม่ใส่ = หลุม 5×5 ลูกเดียว · บล็อกคืนเองครบ" },
+    { cmd: "/ylc prank bigmeteor", arg: "[จำนวน]", desc: "ลูกยักษ์ หลุม 21×21 ตายตัว" },
+    { cmd: "/ylc prank drop", arg: "[ความสูง]", desc: "ยกขึ้นฟ้าแล้วปล่อยตก · อยู่ในรถ รถพังคนรอด" },
+    { cmd: "/ylc prank bomb", arg: "[วินาที]", desc: "ระเบิดรถ · นับถอยหลังมีเสียง ลงทันยังรอด" },
+    { cmd: "/ylc prank hit", arg: "[%]", desc: "ทุบรถทีละ % ครบ 100 แล้วระเบิด · ไม่ใส่ = 20%" },
+    { cmd: "/ylc prank police", arg: "[1-6]", desc: "เรียกตำรวจไล่ ติดดาวทันที · เกิดดักหน้า ไม่ใช่ตามหลัง" },
+    { cmd: "/ylc prank runaway", arg: "[วินาที]", desc: "รถหนีเอง · ขึ้นรถแล้วคุมไม่ได้ · ไม่ใส่ = 20 วิ · 2n = 2 นาที" },
+    { cmd: "/ylc prank taxi", arg: "[เวลา]", desc: "แท็กซี่แย่งผู้โดยสารแล้วขับหนี · 5 = 5 นาที 30s = 30 วิ · ไม่ใส่ = 5 นาที · ไล่ทันแย่งคืนได้ · ส่งซ้ำ = ต่อเวลา" },
+    { cmd: "/ylc prank boulder", arg: "[วินาที]", desc: "หินยักษ์กลิ้งไล่ตามถนน · ต้องบูสต์หนี · ไม่ใส่ = 40 วิ · ส่งรัว = หลายลูกรอบตัว สูงสุด 20" },
+    { cmd: "/ylc prank tornado", arg: "[วินาที]", desc: "ทอร์นาโดดูดรถกับคนขึ้นฟ้าแล้วเหวี่ยง · รถพังคนรอด · ไม่ใส่ = 60 วิ" },
+    { cmd: "/ylc prank bounce", arg: "[วินาที]", desc: "รถกระโดดเองสูง 2-4 บล็อก จังหวะไม่เท่ากัน · ไม่ใส่ = 10 วิ" },
+    { cmd: "/ylc prank fans", arg: "[วินาที]", desc: "แฟนคลับรุมรอบรถ รถช้าเหลือ 15 กม./ชม. · ไม่ใส่ = 15 วิ" },
+    { cmd: "/ylc prank detour", arg: "[อย่างน้อย] [ไม่เกิน]", desc: "ลูกค้าเปลี่ยนใจ ย้ายจุดรับ/จุดส่งไกลขึ้น · ไม่ใส่ = 15-40 บล็อก" },
+  ]},
+  { cat: "mid", title: "ได้ทั้งช่วยและแกล้ง", items: [
+    { cmd: "/ylc mid swap", arg: "", desc: "เปลี่ยนชนิดรถแบบสุ่ม · ไม่มีรถ = เสกแล้วนั่งให้เลย · สุ่มสี" },
+    { cmd: "/ylc mid rocket", arg: "[20-220|auto]", desc: "รถพุ่งไปหน้า ทะลุทุกอย่าง · ไม่ใส่ = 100 บล็อก · auto = วัดตึกที่ขวางแล้วคิดแรงเอง" },
+  ], note: "จรวดทะลุกำแพงโดยตั้งใจ — ทางออกจากลานจอด ทางตัน หรือผิดฝั่งตึก" },
+  { cat: "set", title: "ติดอยู่ ใช้อันนี้", items: [
+    { cmd: "/ylc settings road", arg: "", desc: "ตกออกนอกเมือง กลับขึ้นถนนใกล้สุด พารถไปด้วย" },
+    { cmd: "/ylc settings unstick", arg: "", desc: "ตายแล้วค้าง กดเกิดไม่ได้ ตัวไม่ขยับ" },
+  ], note: "สั่งจากคอนโซลได้ (ylc <ชื่อ> settings unstick) เพราะคนที่ติดมักพิมพ์เองไม่ได้ · ปกติปลั๊กอินดึงขึ้นเองใน 3 วิ อันนี้คือทางสำรอง" },
+  { cat: "set", title: "ตั้งค่า", items: [
+    { cmd: "/ylc settings reset", arg: "", desc: "เริ่มภารกิจส่งของใหม่" },
+    { cmd: "/ylc settings lose", arg: "", desc: "ทำภารกิจปัจจุบันพัง นับเป็นแพ้" },
+    { cmd: "/ylc settings taxi", arg: "<stop|เวลา>", desc: "ถอนแท็กซี่ · stop = ยกเลิกเลย · 2 = ตัด 2 นาที · 30s = ตัด 30 วิ" },
+    { cmd: "/ylc settings air stop", arg: "", desc: "เก็บเครื่องบินทุกลำ · ใครลอยอยู่ได้ร่มชูชีพ" },
+    { cmd: "/ylc settings spawnnpc", arg: "[ใกล้สุด] [ไกลสุด]", desc: "ระยะที่ชาวบ้านมาโผล่ · เริ่ม 20-50 · ใส่ตัวเดียว = ใกล้สุด" },
+    { cmd: "/ylc settings deliver", arg: "[ใกล้สุด] [ไกลสุด]", desc: "ระยะจากจุดรับถึงจุดส่ง · เริ่ม 100-500 · ใส่ตัวเดียว = ใกล้สุด" },
+    { cmd: "/ylc settings time", arg: "[วินาที]", desc: "นับถอยหลังตอนส่ง · 0 = ปิด" },
+  ], note: "พิมพ์คำสั่งเปล่า ๆ เพื่อดูค่าปัจจุบัน" },
+];
+
+const ALL = DATA.flatMap(g => g.items.map(i => ({ ...i, cat: g.cat })));
+const POOL = ALL.map(i => i.cmd);          // what Tab completes against
+
+const listEl   = document.getElementById("list");
+const extrasEl = document.getElementById("extras");
+const qEl      = document.getElementById("q");
+const ghostEl  = document.getElementById("ghost");
+let cat = "all";
+
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+
+/** Marks the first match. Found in the raw text and escaped piece by piece, so a
+ *  search for "<" or "&" lines up with what is on screen. */
+function hl(text, term) {
+  if (!term) return esc(text);
+  const i = text.toLowerCase().indexOf(term.toLowerCase());
+  if (i < 0) return esc(text);
+  return esc(text.slice(0, i)) + "<mark>" + esc(text.slice(i, i + term.length)) + "</mark>"
+       + esc(text.slice(i + term.length));
+}
+
+function render() {
+  const term = qEl.value.trim();
+  const low = term.toLowerCase();
+  let shown = 0;
+  listEl.innerHTML = DATA.map(g => {
+    if (cat !== "all" && cat !== g.cat) return "";
+    const rows = g.items.filter(i =>
+      !low || (i.cmd + " " + i.arg + " " + i.desc).toLowerCase().includes(low));
+    if (!rows.length) return "";
+    shown += rows.length;
+    return `<section class="group" data-cat="${g.cat}">
+      <h2>${esc(g.title)}</h2>
+      <div class="card">${rows.map(i => `
+        <div class="row" data-copy="${esc(i.cmd)}">
+          <span class="cmd">${hl(i.cmd, term)} <span class="arg">${esc(i.arg)}</span></span>
+          <span class="desc">${hl(i.desc, term)}</span>
+        </div>`).join("")}</div>
+      ${g.note && !low ? `<p class="gnote">${esc(g.note)}</p>` : ""}
+    </section>`;
+  }).join("");
+  if (!shown) listEl.innerHTML = `<div class="empty">ไม่พบคำสั่งที่ตรงกับ “${esc(term)}”</div>`;
+  // Hotbar and map are not commands: out of the way while looking for one.
+  extrasEl.hidden = !!low || cat !== "all";
+  drawGhost();
+}
+
+/** The first command that starts with what has been typed — what Tab will accept. */
+function suggestion() {
+  const v = qEl.value;
+  if (!v || v !== v.trimStart()) return null;
+  const hit = POOL.find(c => c.toLowerCase().startsWith(v.toLowerCase()) && c.length > v.length);
+  return hit || null;
+}
+
+function drawGhost() {
+  const s = suggestion();
+  ghostEl.innerHTML = s ? esc(qEl.value) + "<b>" + esc(s.slice(qEl.value.length)) + "</b>" : "";
+}
+
+qEl.addEventListener("input", render);
+qEl.addEventListener("keydown", e => {
+  if (e.key === "Tab") {
+    const s = suggestion();
+    if (s) { e.preventDefault(); qEl.value = s; render(); }
+  } else if (e.key === "ArrowRight" && qEl.selectionStart === qEl.value.length) {
+    const s = suggestion();
+    if (s) { qEl.value = s; render(); }
+  } else if (e.key === "Escape") {
+    qEl.value = ""; render();
+  }
+});
+
+document.getElementById("chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip");
+  if (!b) return;
+  cat = b.dataset.cat;
+  document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c === b));
+  render();
+});
+
+listEl.addEventListener("click", e => {
+  const row = e.target.closest(".row");
+  if (!row) return;
+  navigator.clipboard?.writeText(row.dataset.copy);
+  row.classList.add("copied");
+  setTimeout(() => row.classList.remove("copied"), 400);
+});
+
+// "/" anywhere jumps to the search box, like a real console.
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && document.activeElement !== qEl) { e.preventDefault(); qEl.focus(); }
+});
+
+render();
+qEl.focus();
+</script>
 </body>
 </html>
